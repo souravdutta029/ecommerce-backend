@@ -23,7 +23,7 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /code
 
 # Copy django project to container
-COPY ./Backend/EcommerceInventory/ /code/Backend/EcommerceInventory/
+COPY ./Backend/EcommerceInventory /code/Backend/EcommerceInventory/
 
 # Install requirements
 RUN pip install -r ./Backend/EcommerceInventory/requirements.txt
