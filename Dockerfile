@@ -26,7 +26,7 @@ WORKDIR /code
 COPY ./Backend/EcommerceInventory/ /code/Backend/EcommerceInventory/
 
 # Install requirements
-RUN pip install -r Backend/EcommerceInventory/requirements.txt
+RUN pip install -r ./Backend/EcommerceInventory/requirements.txt
 
 # Copy static files
 COPY --from=build-stage ./code/Frontend/ecommerce_inventory/build /code/Backend/EcommerceInventory/static/
