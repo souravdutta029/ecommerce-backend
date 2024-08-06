@@ -7,42 +7,43 @@ COPY ./Frontend/ecommerce_inventory/ /code/Frontend/ecommerce_inventory/
 
 WORKDIR /code/Frontend/ecommerce_inventory
 
-#Installing Packages
+#Installing packages
 RUN npm install
 
-#Building Frontend
+#Building the frontend
 RUN npm run build
 
-# Stage 2:Build Backend
-FROM python:3.11.0
 
-# set environment variables
+#Stage 2:Build Backend
+FROM python:3.11.4
+
+#Set Environment Variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 WORKDIR /code
 
-# Copy django project to container
+#Copy Django Project to the container
 COPY ./Backend/EcommerceInventory /code/Backend/EcommerceInventory/
 
-# Install requirements
+#Install the required packages
 RUN pip install -r ./Backend/EcommerceInventory/requirements.txt
 
-# Copy static files
+#Copy the frontend build to the Django project
 COPY --from=build-stage ./code/Frontend/ecommerce_inventory/build /code/Backend/EcommerceInventory/static/
 COPY --from=build-stage ./code/Frontend/ecommerce_inventory/build/static /code/Backend/EcommerceInventory/static/
-COPY --from=build-stage ./code/Frontend/ecommerce_inventory/build/index.html /code/Backend/EcommerceInventory/EcommerceInventory/templates/index.html/
+COPY --from=build-stage ./code/Frontend/ecommerce_inventory/build/index.html /code/Backend/EcommerceInventory/EcommerceInventory/templates/index.html
 
-# Run django management commands
+#Run Django Migration Command
 RUN python ./Backend/EcommerceInventory/manage.py migrate
 
-# Run django collectstatic command
+#Run Django Collectstatic Command
 RUN python ./Backend/EcommerceInventory/manage.py collectstatic --no-input
 
-# expose port
+#Expose the port
 EXPOSE 80
 
 WORKDIR /code/Backend/EcommerceInventory
 
-# Run django server
-CMD ["gunicon", "EcommerceInventory.wsgi:application", "--bind", "0.0.0.0:8000"]
+#Run the Django Server
+CMD ["gunicorn","EcommerceInventory.wsgi:application","--bind","0.0.0.0:8000"]
