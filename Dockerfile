@@ -29,9 +29,9 @@ COPY ./Backend/EcommerceInventory/ /code/Backend/EcommerceInventory/
 RUN pip install -r Backend/EcommerceInventory/requirements.txt
 
 # Copy static files
-COPY --from = build-stage ./code/Frontend/ecommerce_inventory/build /code/Backend/EcommerceInventory/static/
-COPY --from = build-stage ./code/Frontend/ecommerce_inventory/build/static /code/Backend/EcommerceInventory/static/
-COPY --from = build-stage ./code/Frontend/ecommerce_inventory/build/index.html /code/Backend/EcommerceInventory/EcommerceInventory/templates/index.html/
+COPY --from=build-stage ./code/Frontend/ecommerce_inventory/build /code/Backend/EcommerceInventory/static/
+COPY --from=build-stage ./code/Frontend/ecommerce_inventory/build/static /code/Backend/EcommerceInventory/static/
+COPY --from=build-stage ./code/Frontend/ecommerce_inventory/build/index.html /code/Backend/EcommerceInventory/EcommerceInventory/templates/index.html/
 
 # Run django management commands
 RUN python ./Backend/EcommerceInventory/manage.py migrate
